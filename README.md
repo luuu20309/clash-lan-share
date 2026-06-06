@@ -38,7 +38,7 @@
 
 ### 前置条件
 
-1. 已安装并运行 [Clash](https://github.com/Dreamacro/clash) / [Clash Verge](https://github.com/zzzgydi/clash-verge) / [Clash Verge Rev](https://github.com/clash-verge-rev/clash-verge-rev) / [mihomo](https://github.com/MetaCubeX/mihomo)
+1. 已安装并运行 Clash/Clash Verge/Clash Verge Rev/mihomo
 2. Clash 已开启 RESTful API（默认已开启）
 
 ### 操作步骤
