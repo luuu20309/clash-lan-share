@@ -10,7 +10,7 @@
 
 一个轻量、美观的桌面工具，让你轻松将 Clash 代理共享给局域网内的其他设备。
 
-![demo](./docs/demo.png)
+![demo](./demo.png)
 
 </div>
 
