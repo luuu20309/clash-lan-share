@@ -4,7 +4,7 @@
 
 **让局域网设备共享 Clash 代理连接**
 
-[![Release](https://img.shields.io/github/v/release/luuu/clash-lan-share?color=7b9e87&style=flat-square)](https://github.com/luuu20309/clash-lan-share/releases)
+[![Release](https://img.shields.io/github/v/release/luuu20309/clash-lan-share?color=7b9e87&style=flat-square)](https://github.com/luuu20309/clash-lan-share/releases)
 [![License](https://img.shields.io/badge/license-MIT-7b9e87?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-7b9e87?style=flat-square)]()
 
