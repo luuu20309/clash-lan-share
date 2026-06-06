@@ -1,0 +1,25 @@
+[package]
+name = "clash-lan-share"
+version = "0.1.0"
+edition = "2021"
+description = "让局域网设备共享 Clash 代理连接"
+authors = ["luuu"]
+
+[lib]
+name = "clash_lan_share_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = "2"
+local-ip-address = "0.6"
+netstat2 = "0.11"
+gethostname = "0.5"
+dns-lookup = "2"
+dirs = "5"

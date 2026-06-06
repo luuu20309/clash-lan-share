@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clash LAN Share</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="window-frame">
+    <!-- 自定义标题栏 -->
+    <header class="titlebar">
+      <div class="titlebar-drag" data-tauri-drag-region>
+        <span class="titlebar-icon">🌿</span>
+        <span class="titlebar-title">Clash LAN Share</span>
+      </div>
+      <div class="titlebar-controls">
+        <button class="titlebar-btn" id="btnMinimize" title="最小化">
+          <svg width="12" height="12" viewBox="0 0 12 12"><rect y="5" width="12" height="1.5" rx="0.75" fill="currentColor"/></svg>
+        </button>
+        <button class="titlebar-btn btn-close" id="btnClose" title="关闭">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1L11 11M1 11L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 主内容 -->
+    <div class="app">
+      <!-- 顶部信息栏 -->
+      <div class="header">
+        <div class="header-left">
+          <div class="header-text">
+            <h1>让局域网设备共享代理连接</h1>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="status-dot" id="statusDot"></div>
+          <span class="status-text" id="statusText">正在检测...</span>
+        </div>
+      </div>
+
+      <!-- 主内容区 -->
+      <div class="content">
+        <!-- 左栏 -->
+        <div class="column left">
+          <!-- Clash 状态卡片 -->
+          <div class="card">
+            <div class="card-title">📡 Clash 状态</div>
+            <div class="card-divider"></div>
+            <div class="info-rows">
+              <div class="info-row">
+                <span class="info-label">版本</span>
+                <span class="info-value" id="clashVersion">未连接</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">API 端口</span>
+                <span class="info-value mono" id="clashPort">未检测</span>
+                <button class="copy-btn" onclick="copyText('clashPort')">复制</button>
+              </div>
+              <div class="info-row">
+                <span class="info-label">代理模式</span>
+                <span class="info-value" id="clashMode">未知</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">允许局域网</span>
+                <span class="info-value" id="clashLan">未开启</span>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="btn-primary" id="btnToggleLan" onclick="toggleLan()" disabled>
+                开启局域网共享
+              </button>
+              <button class="btn-outline" onclick="detectClash()">
+                🔄 重新检测
+              </button>
+            </div>
+          </div>
+
+          <!-- 代理端口卡片 -->
+          <div class="card">
+            <div class="card-title">⚙️ 代理端口</div>
+            <div class="card-divider"></div>
+            <div class="info-rows">
+              <div class="info-row">
+                <span class="info-label">HTTP 代理</span>
+                <span class="info-value mono" id="httpPort">7890</span>
+                <button class="copy-btn" onclick="copyText('httpPort')">复制</button>
+              </div>
+              <div class="info-row">
+                <span class="info-label">SOCKS5</span>
+                <span class="info-value mono" id="socksPort">7891</span>
+                <button class="copy-btn" onclick="copyText('socksPort')">复制</button>
+              </div>
+              <div class="info-row">
+                <span class="info-label">混合端口</span>
+                <span class="info-value mono" id="mixedPort">7890</span>
+                <button class="copy-btn" onclick="copyText('mixedPort')">复制</button>
+              </div>
+            </div>
+            <div class="mode-section">
+              <span class="mode-label">快速切换模式</span>
+              <div class="mode-buttons">
+                <button class="btn-mode" onclick="setMode('rule')">规则</button>
+                <button class="btn-mode" onclick="setMode('global')">全局</button>
+                <button class="btn-mode" onclick="setMode('direct')">直连</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右栏 -->
+        <div class="column right">
+          <!-- 分享配置卡片 -->
+          <div class="card">
+            <div class="card-title">🔗 分享配置</div>
+            <div class="card-divider"></div>
+            <div class="info-rows">
+              <div class="info-row">
+                <span class="info-label">局域网 IP</span>
+                <span class="info-value mono" id="lanIp">检测中...</span>
+                <button class="copy-btn" onclick="copyText('lanIp')">复制</button>
+              </div>
+              <div class="info-row">
+                <span class="info-label">HTTP 代理</span>
+                <span class="info-value mono" id="shareHttp">—</span>
+                <button class="copy-btn" onclick="copyText('shareHttp')">复制</button>
+              </div>
+              <div class="info-row">
+                <span class="info-label">SOCKS5</span>
+                <span class="info-value mono" id="shareSocks">—</span>
+                <button class="copy-btn" onclick="copyText('shareSocks')">复制</button>
+              </div>
+            </div>
+            <div class="tip-box">
+              💡 在其他设备上设置 HTTP 代理为上方地址即可。<br>
+              支持浏览器、系统代理、终端等。
+            </div>
+          </div>
+
+          <!-- 设备列表卡片 -->
+          <div class="card card-expand">
+            <div class="card-title">📱 局域网设备</div>
+            <div class="card-divider"></div>
+            <div class="device-list" id="deviceList">
+              <div class="empty-state">
+                <span class="empty-icon">📡</span>
+                <p>暂无设备连接</p>
+                <p class="empty-hint">开启局域网共享后，其他设备设置代理即可</p>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="btn-outline" id="btnScan" onclick="scanDevices()">
+                🔍 扫描设备
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部日志 -->
+      <div class="card log-card">
+        <div class="card-title">📋 运行日志</div>
+        <div class="card-divider"></div>
+        <div class="log-viewer" id="logViewer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 通知 -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
